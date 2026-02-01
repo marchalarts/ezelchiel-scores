@@ -1,7 +1,0 @@
-{
-  "name": "ezelchiel-scores",
-  "type": "module",
-  "dependencies": {
-    "@notionhq/client": "^2.2.15"
-  }
-}
