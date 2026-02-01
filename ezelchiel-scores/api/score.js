@@ -6,7 +6,26 @@ const notion = new Client({
 
 const DATABASE_ID = process.env.NOTION_DATABASE_ID;
 
+// 🔥 CORS headers
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
+};
+
 export default async function handler(req, res) {
+  // 🔥 Preflight (dit is wat nu faalt)
+  if (req.method === "OPTIONS") {
+    res.writeHead(200, corsHeaders);
+    res.end();
+    return;
+  }
+
+  // Altijd CORS headers meesturen
+  Object.entries(corsHeaders).forEach(([key, value]) =>
+    res.setHeader(key, value)
+  );
+
   // ===== POST: score opslaan =====
   if (req.method === "POST") {
     try {
@@ -27,7 +46,7 @@ export default async function handler(req, res) {
     }
   }
 
-  // ===== GET: top 10 leaderboard =====
+  // ===== GET: top 10 =====
   if (req.method === "GET") {
     try {
       const response = await notion.databases.query({
